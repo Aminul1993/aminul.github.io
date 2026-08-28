@@ -48,6 +48,8 @@ The workflow:
 
 # Architecture
 
+![Architecture Diagram](architecture.png)
+
 ```mermaid
 flowchart TD
     START((START)) --> decide_flow

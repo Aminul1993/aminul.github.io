@@ -6,6 +6,8 @@ The Extraction Workbench is a schema-driven document scanning and data extractio
 
 An Angular parent application launches the workbench in a popup window, passes a target Django serializer, and receives the extracted data back through `window.postMessage()` after user review and correction.
 
+![Extraction Workbench: Document Scan to Form Handoff](Extraction%20Workbench%20Document%20Scan%20to%20Form%20Handoff.png)
+
 ---
 
 ## Features
@@ -23,6 +25,8 @@ An Angular parent application launches the workbench in a popup window, passes a
 ---
 
 ## Architecture Overview
+
+![Architecture Diagram](architecture.png)
 
 ```mermaid
 sequenceDiagram

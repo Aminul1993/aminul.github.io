@@ -14,10 +14,8 @@ Senior Software Engineer with 9+ years of experience building enterprise applica
 - Node.js
 
 ### AI & LLM
-- Claude API
-- OpenAI API
-- LangGraph
 - Ollama
+- LangGraph
 - MCP (Model Context Protocol)
 - AI Agents
 
@@ -47,8 +45,12 @@ Senior Software Engineer with 9+ years of experience building enterprise applica
 ### PMS AI Search Assistant
 An intelligent enterprise assistant capable of understanding natural language queries and routing them to database retrieval, application navigation, or AI-generated responses. Built using LangGraph, Ollama, Django, and Redis.
 
+📄 [Technical README →](pms-ai-search-assistant/README.md)
+
 ### Intelligent Document Extraction Platform
 OCR + LLM-powered document processing system that extracts structured data from PDFs and images with a human-in-the-loop validation interface.
+
+📄 [Technical README →](intelligent-document-extraction/README.md)
 
 ### SOL AI Platform
 A healthcare-focused AI platform delivering conversational assistance and digital support experiences through LLM-powered interactions.
@@ -59,6 +61,9 @@ Kafka and PySpark-based large-scale data processing architecture supporting scal
 ---
 
 # 📘 Case Study 1: PMS AI Search Assistant
+
+> Internally implemented as the `AI Query Workflow` module.
+> 📄 Full technical write-up: [pms-ai-search-assistant/README.md](pms-ai-search-assistant/README.md)
 
 ## Overview
 
@@ -147,7 +152,7 @@ Django
 LangGraph
 Ollama
 Redis
-PostgreSQL
+MySQL
 Docker
 ```
 
@@ -163,6 +168,9 @@ Docker
 ---
 
 # 📘 Case Study 2: Intelligent Document Extraction Platform
+
+> Internally implemented as the `Extraction Workbench` module.
+> 📄 Full technical write-up: [intelligent-document-extraction/README.md](intelligent-document-extraction/README.md)
 
 ## Overview
 
@@ -262,9 +270,10 @@ through an intuitive review interface.
 ```text
 Python
 Django
-OCR Engine
-LLM APIs
-PostgreSQL
+Django REST Framework
+Tesseract.js (OCR)
+PDF.js
+Ollama
 Docker
 ```
 
@@ -300,7 +309,7 @@ SOL is a digital healthcare platform designed to provide AI-powered conversation
 
 ### Conversational AI Engine
 
-Provides context-aware interactions using LLM APIs.
+Provides context-aware interactions using Ollama-hosted LLMs.
 
 ### Secure Backend Services
 
@@ -318,7 +327,7 @@ Designed for future enhancement and additional AI capabilities.
 Python
 Django
 REST APIs
-LLM APIs
+Ollama
 MySQL
 Docker
 ```
