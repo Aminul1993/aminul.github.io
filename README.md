@@ -1,5 +1,6 @@
 ## 👋 Hi, I'm Aminul Islam
 
+
 Senior Software Engineer with 9+ years of experience building enterprise applications, AI-powered solutions, and data engineering platforms. Passionate about AI integration, scalable architectures, enterprise software, and intelligent automation.
 
 ---
