@@ -43,15 +43,15 @@ Senior Software Engineer with 9+ years of experience building enterprise applica
 
 ## ⭐ Featured Projects
 
-### PMS AI Search Assistant
-An intelligent enterprise assistant capable of understanding natural language queries and routing them to database retrieval, application navigation, or AI-generated responses. Built using LangGraph, Ollama, Django, and Redis.
+### PMS AI Search Assistant (AIChatAPI)
+A conversational assistant for a multi-module PMS that classifies each question and routes it to a self-correcting SQL agent, permission-filtered navigation, or session-aware recall. Built using LangGraph, Ollama, Django REST Framework, and MySQL.
 
-📄 [Technical README →](pms-ai-search-assistant/README.md)
+📄 [Technical README →](ai-search-assistant/README.md)
 
-### Intelligent Document Extraction Platform
-OCR + LLM-powered document processing system that extracts structured data from PDFs and images with a human-in-the-loop validation interface.
+### Intelligent Document Extraction Platform (Extraction Workbench)
+A single, schema-driven API that turns invoices, purchase orders, and other business documents into structured, serializer-validated JSON using OCR/LLM conversion (MarkItDown) and a human-in-the-loop review UI.
 
-📄 [Technical README →](intelligent-document-extraction/README.md)
+📄 [Technical README →](extraction-workbench/README.md)
 
 ### SOL AI Platform
 A healthcare-focused AI platform delivering conversational assistance and digital support experiences through LLM-powered interactions.
@@ -63,8 +63,8 @@ Kafka and PySpark-based large-scale data processing architecture supporting scal
 
 # 📘 Case Study 1: PMS AI Search Assistant
 
-> Internally implemented as the `AI Query Workflow` module.
-> 📄 Full technical write-up: [pms-ai-search-assistant/README.md](pms-ai-search-assistant/README.md)
+> Internally implemented as the `AIChatAPI` module (`ai_module.views.AIChatAPI`).
+> 📄 Full technical write-up: [ai-search-assistant/README.md](ai-search-assistant/README.md)
 
 ## Overview
 
@@ -95,53 +95,45 @@ The PMS AI Search Assistant uses a multi-stage AI orchestration workflow to anal
 User Query
     │
     ▼
-Intent Detection
+decide_flow (LangGraph router)
     │
-    ├── Database Search
+    ├── A · Database Query        → generate → self-check → run SQL
     │
-    ├── Module Navigation
+    ├── B · Navigation / Knowledge → permission-filtered route match
+    │                                  or domain knowledge answer
     │
-    ├── Knowledge Retrieval
-    │
-    └── LLM Response
+    └── C · History Recall        → answer from rolling session summary
     │
     ▼
-Content Moderation
+Persist turn + refresh session summary
     │
     ▼
 Final Response
 ```
 
-The assistant determines whether a query requires:
+A single classifier decides, per question, whether it needs:
 
-- Database retrieval
-- Module navigation guidance
-- Knowledge-based answers
-- General AI assistance
+- A self-correcting, read-only SQL query against live project data
+- A permission-filtered link to the right screen, or a general knowledge answer
+- Recall of what was already discussed earlier in the same session
 
-and automatically routes requests accordingly.
+and routes the request accordingly, carrying context across the conversation via a per-session rolling summary.
 
 ---
 
 ## Key Features
 
 ### Intelligent Query Routing
-Supports multiple execution paths based on detected user intent.
+A LangGraph decision graph classifies every question and routes it to a dedicated agent instead of relying on one monolithic prompt.
 
-### Enterprise Search Experience
-Provides users with contextual responses without requiring knowledge of system structure.
+### Permission-Aware Navigation
+Candidate screens are filtered against the asking user's own module, sub-module, and settings permissions *before* the LLM ever sees them — the model can't recommend a page the user isn't entitled to.
 
-### Safety & Moderation
-Includes vulgarity and content-validation checks for both user inputs and generated outputs.
+### Self-Correcting SQL Agent
+Natural-language reporting questions become a generated SQL query that is reviewed and re-planned before it ever runs against live data.
 
-### Hybrid Retrieval Architecture
-Combines:
-
-- Structured database lookup
-- Business logic execution
-- AI reasoning
-
-to improve response accuracy.
+### Session-Aware Memory
+A rolling per-session summary lets the assistant answer "what did we discuss earlier" without replaying the full transcript.
 
 ---
 
@@ -150,11 +142,11 @@ to improve response accuracy.
 ```text
 Python
 Django
+Django REST Framework
 LangGraph
 Ollama
-Redis
 MySQL
-Docker
+Knox Authentication
 ```
 
 ---
@@ -170,8 +162,8 @@ Docker
 
 # 📘 Case Study 2: Intelligent Document Extraction Platform
 
-> Internally implemented as the `Extraction Workbench` module.
-> 📄 Full technical write-up: [intelligent-document-extraction/README.md](intelligent-document-extraction/README.md)
+> Internally implemented as the `ExtractionWorkbenchAPI` view (`ai_module.views.ExtractionWorkbenchAPI`).
+> 📄 Full technical write-up: [extraction-workbench/README.md](extraction-workbench/README.md)
 
 ## Overview
 
@@ -205,24 +197,30 @@ leading to manual intervention and data entry efforts.
 Document Upload
         │
         ▼
-OCR Extraction
+OCR / Text Conversion (MarkItDown)
         │
         ▼
-LLM Field Recognition
+Schema-Driven LLM Field Extraction
         │
         ▼
-Confidence Validation
+JSON-Shape Validation
         │
         ▼
-Manual Review UI
+Human Review & Correction
         │
         ▼
-Structured JSON Output
+Structured, Schema-Matched Output
 ```
 
 ---
 
 ## Core Features
+
+### Schema-Driven Extraction (One Endpoint, Any Document Type)
+
+The API doesn't hard-code what a "purchase order" or "invoice" looks like — it reads the target Django REST Framework serializer's fields by reflection and asks the LLM to fill exactly those fields. Onboarding a new document type is a serializer change, not a new endpoint or parsing routine.
+
+---
 
 ### OCR Processing
 
@@ -232,7 +230,7 @@ Extracts raw text from:
 - Scanned files
 - Mobile images
 
-before passing information to the AI extraction layer.
+via MarkItDown, which normalizes each format into Markdown text before passing it to the AI extraction layer.
 
 ---
 
@@ -272,9 +270,8 @@ through an intuitive review interface.
 Python
 Django
 Django REST Framework
-Tesseract.js (OCR)
-PDF.js
 Ollama
+MarkItDown
 Docker
 ```
 
