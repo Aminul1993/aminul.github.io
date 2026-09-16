@@ -43,8 +43,8 @@ Senior Software Engineer with 9+ years of experience building enterprise applica
 
 ## ⭐ Featured Projects
 
-### PMS AI Search Assistant (AIChatAPI)
-A conversational assistant for a multi-module PMS that classifies each question and routes it to a self-correcting SQL agent, permission-filtered navigation, or session-aware recall. Built using LangGraph, Ollama, Django REST Framework, and MySQL.
+### AI Search Assistant (AIChatAPI)
+A conversational assistant for a multi-module that classifies each question and routes it to a self-correcting SQL agent, permission-filtered navigation, or session-aware recall. Built using LangGraph, Ollama, Django REST Framework, and MySQL.
 
 📄 [Technical README →](ai-search-assistant/README.md)
 
@@ -61,14 +61,14 @@ Kafka and PySpark-based large-scale data processing architecture supporting scal
 
 ---
 
-# 📘 Case Study 1: PMS AI Search Assistant
+# 📘 Case Study 1: AI Search Assistant
 
 > Internally implemented as the `AIChatAPI` module (`ai_module.views.AIChatAPI`).
 > 📄 Full technical write-up: [ai-search-assistant/README.md](ai-search-assistant/README.md)
 
 ## Overview
 
-The PMS AI Search Assistant was developed to simplify information retrieval inside an Enterprise Project Management System (PMS). Instead of manually navigating modules or searching through menus, users can interact with the system using natural language.
+The AI Search Assistant was developed to simplify information retrieval inside an Enterprise Project Management System. Instead of manually navigating modules or searching through menus, users can interact with the system using natural language.
 
 ---
 
@@ -76,7 +76,7 @@ The PMS AI Search Assistant was developed to simplify information retrieval insi
 
 Enterprise users frequently struggle to:
 
-- Locate information across multiple PMS modules
+- Locate information across multiple modules
 - Identify the correct workflow or screen
 - Retrieve project information quickly
 - Understand module relationships
@@ -87,7 +87,7 @@ These challenges reduce productivity and increase onboarding efforts.
 
 ## Solution
 
-The PMS AI Search Assistant uses a multi-stage AI orchestration workflow to analyse user intent and determine the most appropriate action.
+The AI Search Assistant uses a multi-stage AI orchestration workflow to analyse user intent and determine the most appropriate action.
 
 ### Workflow
 

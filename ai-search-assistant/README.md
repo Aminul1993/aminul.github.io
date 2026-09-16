@@ -52,19 +52,19 @@ The remainder of this case study documents the actual implementation in `ai_modu
 
 ## 2. Business Challenge
 
-Before a conversational layer sits in front of it, a multi-module PMS asks every user to already know the system's own map. The patterns below are the ones this feature was built against; the impact column states typical, industry-observed patterns for multi-module ERP/PMS rollouts, not audited figures specific to any one deployment.
+Before a conversational layer sits in front of it, a multi-module asks every user to already know the system's own map. The patterns below are the ones this feature was built against; the impact column states typical, industry-observed patterns for multi-module ERP rollouts, not audited figures specific to any one deployment.
 
 | Challenge | Typical symptom | Illustrative impact |
 |---|---|---|
 | Complex, multi-module application | Tendering → procurement → plant & machinery → warehouse → accounts → approvals, each with its own screens and terminology | Users routinely know their own module well and little else |
-| Difficulty finding information | "Where do I raise an MR" and "which report shows PO status" are among the most repeated questions asked of a help desk | A large share of L1 support volume in ERP/PMS rollouts is navigation-related, not defect-related |
+| Difficulty finding information | "Where do I raise an MR" and "which report shows PO status" are among the most repeated questions asked of a help desk | A large share of L1 support volume in ERP rollouts is navigation-related, not defect-related |
 | High support workload | Site engineers and project staff route basic how-do-I questions to a help desk or a senior colleague | Ties up scarce support and senior staff time on repetitive, low-complexity questions |
 | Slow user onboarding | New project engineers, site supervisors, and subcontractor staff are walked through the module tree one screen at a time | Extends ramp-to-independent-use for every new hire and every new project mobilization |
 | Knowledge scattered across systems | Process knowledge lives in spreadsheets, printed SOPs, chat threads, and tribal memory rather than one place | Answers vary depending on who is asked |
 | Manual navigation across modules | Answering "what's outstanding against this PO" means opening several screens and cross-referencing by hand | Slower decision cycles for procurement and site management |
 | Poor search experience | Keyword/menu search doesn't understand intent — "show pending approvals" fails if the menu label doesn't literally say "approval" | Users give up on the system and ask a person instead |
 
-> **Representative benchmarks.** Figures above are illustrative patterns drawn from typical multi-module ERP/PMS rollouts, not audited results for a specific deployment — use them to size the opportunity, not as a guarantee.
+> **Representative benchmarks.** Figures above are illustrative patterns drawn from typical multi-module ERP rollouts, not audited results for a specific deployment — use them to size the opportunity, not as a guarantee.
 
 ---
 

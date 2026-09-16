@@ -63,7 +63,7 @@ Its core idea is unusual enough to be the whole business case: the view does not
 
 Every organization that runs procurement, accounts payable, or contract intake through paper or PDF documents carries the same structural cost: a human has to read the document before the system can use it.
 
-- **Manual data entry** — Line items, totals, dates, and vendor details are retyped into an ERP or PMS by hand, once per document.
+- **Manual data entry** — Line items, totals, dates, and vendor details are retyped into an ERP by hand, once per document.
 - **High processing time** — A multi-page purchase order or tender can take 10–20 minutes to key in correctly, longer with poor scans.
 - **Human error** — Transposed digits, missed line items, and mismatched vendor names are routine at volume, and expensive downstream.
 - **Format sprawl** — PDFs, scanned images, Word and Excel attachments, and email bodies all carry the same data in different shapes.
@@ -429,7 +429,7 @@ Document extraction touches two sensitive things at once: the content of busines
 | Area | Current state | Recommendation |
 |---|---|---|
 | Authentication | Auth (`IsAuthenticated`) | Require the platform's existing session/token auth before go-live — see [§5](#5-api-design) |
-| RBAC | Not enforced at this view | Gate by module permission, consistent with the rest of the PMS permission model |
+| RBAC | Not enforced at this view | Gate by module permission, consistent with the rest of the permission model |
 | Secure file handling | Upload is read fully into memory, never written to disk | Add a max-size limit and content-type allowlist before the conversion step |
 | Encryption in transit | Depends on deployment TLS termination | Enforce HTTPS end-to-end, including to the LLM provider |
 | Encryption at rest | N/A today (no document persisted by this view) | If source documents are persisted for audit, encrypt the object store and the audit table |
