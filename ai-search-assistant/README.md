@@ -154,7 +154,11 @@ Before a conversational layer sits in front of it, a multi-module asks every use
 7. The turn is appended to `AIHistory`, and the session summary is regenerated (old summary + new turns, capped at roughly 300 words).
 8. The response is returned with the `X-Chat-Session` header so the next turn continues the same conversation.
 
-![AIChatAPI architecture diagram](AIChatAPI%20Microservice%20Architecture.png)
+![AIChatAPI AWS Solution Architecture](AIChatAPI%20AWS%20Solution%20Architecture.png)
+
+![Level-1 AIChatAPI Data Flow Diagram](Level-1%20AIChatAPI%20Data%20Flow%20Diagram.png)
+
+![AIChatAPI LangGraph Agent Decision Flow](AIChatAPI%20LangGraph%20Agent%20Decision%20Flow.png)
 ---
 
 ## 5. Technical Implementation

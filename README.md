@@ -53,6 +53,16 @@ A single, schema-driven API that turns invoices, purchase orders, and other busi
 
 📄 [Technical README →](extraction-workbench/README.md)
 
+### Pest Identification Platform
+A multimodal AI diagnostic platform that lets field users photograph crop damage and receive a structured, expert-grade pest/disease diagnosis in seconds — combining color-agnostic background removal, content-aware multi-crop embedding, vision-LLM attribute extraction, and triple-signal confidence gating. Built on AWS Bedrock, OpenSearch, DynamoDB, and S3.
+
+📄 [Technical README →](pest-identification-platform/README.md)
+
+### HRMS Agent
+A permission-aware conversational AI layer over an existing HRMS platform, letting employees check leave balances, apply for leave, and review team attendance in plain language instead of multi-step UI forms. Built with FastAPI, LangGraph, and Anthropic Claude, with fail-closed authorization and per-user permission-gated tools.
+
+📄 [Technical README →](hrms-agent/README.md)
+
 ### SOL AI Platform
 A healthcare-focused AI platform delivering conversational assistance and digital support experiences through LLM-powered interactions.
 
@@ -286,7 +296,188 @@ Docker
 
 ---
 
-# 📘 Case Study 3: SOL AI Platform
+# 📘 Case Study 3: Pest Identification Platform
+
+> 📄 Full technical write-up: [pest-identification-platform/README.md](pest-identification-platform/README.md)
+
+## Overview
+
+The Pest Identification Platform is a proof-of-concept AI-powered visual diagnostic system for tea and specialty-crop plantations. It lets anyone with a smartphone photograph a damaged leaf, stem, or fruit and receive, in seconds, a structured, expert-grade diagnosis — pest or disease identity, affected plant part, seasonal behavior, symptoms, and recommended treatment.
+
+---
+
+## Business Problem
+
+Plantation crop-protection expertise is scarce and centralized in a handful of agronomists who cannot be present on every estate, so diagnosis latency is bound by expert availability rather than damage-detection speed. Real-world field photos — arbitrary angles, variable lighting, unmarked diagnostic regions — defeat naïve, whole-image similarity matching, and existing digital tools only work by exact filename or catalog lookup, which is useless to someone who doesn't already know what they're looking at.
+
+---
+
+## Solution
+
+The platform layers four complementary AI techniques into a single pipeline rather than relying on any one in isolation.
+
+### Workflow
+
+```text
+Photo Upload
+    │
+    ▼
+Color-Agnostic Background Removal
+    │
+    ▼
+Content-Aware 5-Crop Variant Generation
+    │
+    ▼
+Titan Multimodal Embeddings → OpenSearch k-NN Search
+    │
+    ▼
+Vision-LLM Structured Attribute Extraction
+    │
+    ▼
+LLM Evaluator — Triple-Signal Confidence Gate
+    │
+    ├── Confident  → Structured diagnosis + matched region
+    │
+    └── Unconfident → Honest "unidentified" + queued for expert review
+```
+
+A result is only returned as a confident match when the evaluator's confidence, an explicit match against the admin's verified description, and the candidate's raw similarity all agree — otherwise the system honestly reports "unidentified" and queues the case for human review, pre-enriched with the AI's own best-effort guess.
+
+---
+
+## Key Features
+
+### Color-Agnostic Background Removal
+Strips soil, grass, hands, and surfaces from the frame before embedding — deliberately avoiding a hue-based mask, since crop damage is itself often a color deviation from healthy tissue.
+
+### Content-Aware Multi-Crop Embedding
+Generates five crop variants per photo via edge-density scoring, so a diagnostic region anywhere in an unposed field photo is captured tightly instead of diluted inside one large frame.
+
+### Vision-LLM Attribute Extraction
+Extracts structured, plant-part-aware attributes — texture, lesion shape, color, description — adding a language-based signal that raw pixel similarity cannot provide.
+
+### Triple-Signal Confidence Gating
+Requires image similarity, evaluator confidence, and a match against the admin's fact-checked description to all agree before returning a confident result, with a deterministic numeric fallback if the evaluator is unavailable.
+
+### Human-in-the-Loop Review Queue
+Every unresolved case is queued for expert review and enriched in the background with an AI-suggested lead, turning every "we don't know" moment into a knowledge-base growth opportunity.
+
+---
+
+## Technology Stack
+
+```text
+Python
+FastAPI
+AWS Bedrock (Titan Multimodal Embeddings + vision LLM)
+Amazon OpenSearch (k-NN)
+DynamoDB
+S3
+rembg
+```
+
+---
+
+## Business Impact
+
+- First-pass diagnosis in seconds instead of days of expert-relay latency
+- Targeted early-stage treatment instead of reactive, broad-spectrum spraying
+- Expert time refocused on genuinely ambiguous cases
+- A compounding, self-improving crop-protection knowledge asset
+
+---
+
+# 📘 Case Study 4: HRMS Agent
+
+> 📄 Full technical write-up: [hrms-agent/README.md](hrms-agent/README.md)
+
+## Overview
+
+HRMS Agent replaces multi-step HRMS UI forms with a natural-language chat interface layered on top of the existing HRMS backend, letting employees check leave balances, apply for leave, and review team attendance by simply describing what they want — without HRMS Agent becoming a second source of truth for HR data.
+
+---
+
+## Business Problem
+
+Routine HR tasks required navigating complex, multi-step UI forms, and HRMS exposed no conversational access path. Any new interface layer had to avoid duplicating HRMS's system of record, respect HRMS's individually-permissioned (not role-based) access model exactly, and integrate with the existing Angular frontend without a second login.
+
+---
+
+## Solution
+
+HRMS Agent is a standalone FastAPI service that orchestrates a LangGraph tool-calling agent backed by Anthropic Claude, authenticating against HRMS and inheriting the user's exact permission set.
+
+### Workflow
+
+```text
+User Login (HRMS credentials or SSO)
+    │
+    ▼
+Fetch Permission Tree from HRMS (fail-closed)
+    │
+    ▼
+Session Issued (HttpOnly token, 8h TTL)
+    │
+    ▼
+LangGraph Agent Loop
+    call_model → execute_tools → finish / force_final   (≤ 4 rounds)
+    │
+    ├── Read action        → Tool call → HRMS REST API → response
+    │
+    └── Mutating action     → Show payload → user confirms → execute → async audit log
+    │
+    ▼
+Natural-Language Response
+```
+
+All HR data continues to live exclusively in HRMS's MySQL database; HRMS Agent stores only conversational and operational metadata — sessions, capabilities, chat history, and audit logs — in its own schema.
+
+---
+
+## Key Features
+
+### LangGraph Tool-Calling Agent
+An explicit `StateGraph` (`call_model → execute_tools → finish`), capped at 4 rounds, with a hallucination-detection module that retries when the model emits a tool call as plain text instead of a structured call.
+
+### Permission-Based Tool Gating
+Tools are assembled per user at login by exact alias matching against the user's live HRMS permission tree — the LLM can never see or call a tool the user isn't authorized to use.
+
+### Fail-Closed Authorization
+Login is blocked outright if the HRMS permission-list fetch fails, with no role fallback or approximation.
+
+### Mutation Confirmation Gate
+Every state-changing action (apply/cancel leave, approvals, regularization) shows the exact payload and waits for explicit user confirmation before executing.
+
+### Async Audit Trail & Prompt Caching
+Every mutation is logged asynchronously without adding latency, and the static system prompt is cached via Anthropic's prompt caching API, cutting input token cost by roughly 90% on cached turns.
+
+---
+
+## Technology Stack
+
+```text
+Python
+FastAPI
+LangChain / LangGraph
+Anthropic Claude (Haiku / Sonnet)
+httpx
+PostgreSQL / MySQL
+Pydantic v2
+```
+
+---
+
+## Business Impact
+
+- Reduced friction for routine HR self-service tasks
+- No duplication of HRMS as the system of record
+- Extensible foundation for future HR domains (payroll, appraisal)
+- Lower, more predictable LLM inference cost via prompt caching
+- Auditable, compliance-oriented operation with no added chat latency
+
+---
+
+# 📘 Case Study 5: SOL AI Platform
 
 ## Overview
 

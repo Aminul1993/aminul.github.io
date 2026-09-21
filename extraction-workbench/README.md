@@ -177,7 +177,11 @@ The current implementation is deliberately thin: a Django view, a schema-introsp
 | Validation | JSON-shape parsing only | Re-run the target DRF serializer for field-level and business-rule validation, plus confidence scoring |
 | Monitoring | Standard Django error responses | Structured logging, per-extraction audit rows, model-latency/error dashboards |
 
-![Extraction Workbench: Document Scan to Form Handoff](Schema-Driven%20AI%20Extraction%20Workbench%20Architecture.png)
+![Extraction Workbench AWS AI Architecture](Extraction%20Workbench%20AWS%20AI%20Architecture.png)
+
+![Extraction Workbench Data Flow](Extraction%20Workbench%20Data%20Flow.png)
+
+![AI Extraction Decision Flow](AI%20Extraction%20Decision%20Flow.png)
 ---
 
 ## 5. API Design
